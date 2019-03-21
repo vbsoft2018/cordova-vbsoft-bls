@@ -1,16 +1,16 @@
 {
-  "_from": "vbsoft-bls",
-  "_id": "vbsoft-bls@0.8.8",
+  "_from": "cordova-vbsoft-bls",
+  "_id": "cordova-vbsoft-bls@0.8.8",
   "_inBundle": false,
   "_integrity": "sha1-IeMyo/BgeFHaonrBieHhSQ==",
-  "_location": "/vbsoft-bls",
+  "_location": "/cordova-vbsoft-bls",
   "_phantomChildren": {},
   "_requested": {
     "type": "tag",
     "registry": true,
-    "raw": "vbsoft-bls",
-    "name": "vbsoft-bls",
-    "escapedName": "vbsoft-bls",
+    "raw": "cordova-vbsoft-bls",
+    "name": "cordova-vbsoft-bls",
+    "escapedName": "cordova-vbsoft-bls",
     "rawSpec": "",
     "saveSpec": null,
     "fetchSpec": "latest"
@@ -21,8 +21,8 @@
   ],
   "_resolved": "https://github.com/vbsoft2018/cordova-vbsoft-bls/archive/master.zip",
   "_shasum": "70e0dda3a3a486fb7fe24bcfb923adda739c7698",
-  "_spec": "vbsoft-bls",
-  "_where": "/Users/vbsoft/Documents/vbsoft-bls",
+  "_spec": "cordova-vbsoft-bls",
+  "_where": "/Users/vbsoft/Documents/cordova-vbsoft-bls",
   "author": {
     "name": "VBSoft",
     "email": "master@vbsoft.cn"
@@ -32,7 +32,7 @@
   },
   "bundleDependencies": false,
   "cordova": {
-    "id": "vbsoft-bls",
+    "id": "cordova-vbsoft-bls",
     "platforms": [
       "android"
     ]
@@ -51,7 +51,7 @@
   ],
   "license": "Apache-2.0",
   "main": "./www/vbsoftbls.js",
-  "name": "vbsoft-bls",
+  "name": "cordova-vbsoft-bls",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vbsoft2018/cordova-vbsoft-bls.git"

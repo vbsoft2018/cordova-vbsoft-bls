@@ -2,7 +2,7 @@
     Author By VBSoft
  */
 cordova.define(
-    "vbsoft-bls.vbsoftbls", 
+    "cordova-vbsoft-bls.vbsoftbls", 
     function(require, exports, module) {
     /*global cordova*/
     module.exports = {
@@ -29,7 +29,7 @@ cordova.define(
          * @param {function} failure 失败回调
          */
         listen: function (success, failure) {
-            // alert('platforms⁩/android⁩/platform_www⁩/plugins⁩/vbsoft-bls⁩/www⁩');
+            // alert('platforms⁩/android⁩/platform_www⁩/plugins⁩/cordova-vbsoft-bls⁩/www⁩');
             cordova.exec(success, failure, "vbsoftbls", "listen", []);
         },
 
