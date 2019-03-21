@@ -19,7 +19,7 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://gitee.com/vbsoft2018_admin/vbsoft-bls/repository/archive/master.zip",
+  "_resolved": "https://github.com/vbsoft2018/cordova-vbsoft-bls/archive/master.zip",
   "_shasum": "70e0dda3a3a486fb7fe24bcfb923adda739c7698",
   "_spec": "vbsoft-bls",
   "_where": "/Users/vbsoft/Documents/vbsoft-bls",
@@ -28,7 +28,7 @@
     "email": "master@vbsoft.cn"
   },
   "bugs": {
-    "url": "https://gitee.com/vbsoft2018_admin/vbsoft-bls/issues"
+    "url": "https://github.com/vbsoft2018/cordova-vbsoft-bls/issues"
   },
   "bundleDependencies": false,
   "cordova": {
@@ -39,7 +39,7 @@
   },
   "deprecated": false,
   "description": "Bluetooth Serial Communication Plugin",
-  "homepage": "https://gitee.com/vbsoft2018_admin/vbsoft-bls",
+  "homepage": "https://github.com/vbsoft2018/cordova-vbsoft-bls",
   "keywords": [
     "vbsoft",
     "cordova",
@@ -54,7 +54,7 @@
   "name": "vbsoft-bls",
   "repository": {
     "type": "git",
-    "url": "git+https://gitee.com/vbsoft2018_admin/vbsoft-bls.git"
+    "url": "git+https://github.com/vbsoft2018/cordova-vbsoft-bls.git"
   },
   "version": "0.8.8"
 }

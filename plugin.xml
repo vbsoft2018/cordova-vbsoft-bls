@@ -9,8 +9,8 @@
     <description>VBSoft BLS Communication Plugin</description>
     <license>Apache 2.0</license>
     <keywords>VBSoft, bluetooth, BLE, BLS</keywords>
-    <repo>https://gitee.com/vbsoft2018_admin/vbsoft-bls.git</repo>
-    <issue>https://gitee.com/vbsoft2018_admin/vbsoft-bls/issues</issue>
+    <repo>https://github.com/vbsoft2018/cordova-vbsoft-bls.git</repo>
+    <issue>https://github.com/vbsoft2018/cordova-vbsoft-bls/issues</issue>
 
     <js-module src="www/vbsoftbls.js" name="vbsoftbls">
         <clobbers target="window.vbsoftbls" />
