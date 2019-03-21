@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin
+    xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="vbsoft-bls"
+    version="0.8.8">
+
+    <name>Bluetooth Serial</name>
+    <description>VBSoft BLS Communication Plugin</description>
+    <license>Apache 2.0</license>
+    <keywords>VBSoft, bluetooth, BLE, BLS</keywords>
+    <repo>https://gitee.com/vbsoft2018_admin/vbsoft-bls.git</repo>
+    <issue>https://gitee.com/vbsoft2018_admin/vbsoft-bls/issues</issue>
+
+    <js-module src="www/vbsoftbls.js" name="vbsoftbls">
+        <clobbers target="window.vbsoftbls" />
+    </js-module>
+
+    <platform name="android">
+
+        <config-file target="res/xml/config.xml" parent="/widget">
+            <feature name="vbsoftbls">
+                <param name="android-package" value="cn.vbsoft.bls.vbsoftbls"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/cn/vbsoft/bls/vbsoftbls.java"
+            target-dir="src/cn/vbsoft/bls"/>
+        <source-file src="src/android/cn/vbsoft/bls/vbsoftblsService.java"
+            target-dir="src/cn/vbsoft/bls"/>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.BLUETOOTH" />
+            <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+        </config-file>
+
+    </platform>
+
+    <platform name="browser">
+        <js-module src="src/browser/vbsoftbls.js" name="vbsoftbls_browser">
+            <clobbers target="window.vbsoftbls" />
+        </js-module>
+
+    </platform>
+</plugin>
