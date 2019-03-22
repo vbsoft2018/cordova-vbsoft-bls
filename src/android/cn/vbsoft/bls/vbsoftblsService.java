@@ -30,15 +30,15 @@ import org.json.JSONObject;
  * This code was based on the Android SDK BluetoothChat Sample
  * $ANDROID_SDK/samples/android-17/BluetoothChat
  */
-public class vbsoftblsService {
+public class VBSoftBlsService {
 
     // Debugging
-    private static final String TAG = "vbsoftblsService";
+    private static final String TAG = "VBSoftBlsService";
     private static final boolean D = true;
 
     // Name for the SDP record when creating server socket
-    private static final String NAME_SECURE = "PhoneGapvbsoftblsServiceSecure";
-    private static final String NAME_INSECURE = "PhoneGapvbsoftblsServiceInSecure";
+    private static final String NAME_SECURE = "PhoneGapVBSoftBlsServiceSecure";
+    private static final String NAME_INSECURE = "PhoneGapVBSoftBlsServiceInSecure";
 
     // Unique UUID for this application
     private static final UUID MY_UUID_SECURE = UUID.fromString("7A9C3B55-78D0-44A7-A94E-A93E3FE118CE");
@@ -67,10 +67,10 @@ public class vbsoftblsService {
     public static final int NOT_LISTEN = 0;  // now connected to a remote device
 
     /**
-     * Constructor. Prepares a new vbsoftbls session.
+     * Constructor. Prepares a new VBSoftBls session.
      * @param handler  A Handler to send messages back to the UI Activity
      */
-    public vbsoftblsService(Handler handler) {
+    public VBSoftBlsService(Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
@@ -84,13 +84,13 @@ public class vbsoftblsService {
         if (D) Log.d(TAG, "setState() " + mState + " -> " + state);
         mState = state;
         // Give the new state to the Handler so the UI Activity can update
-        mHandler.obtainMessage(vbsoftbls.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+        mHandler.obtainMessage(VBSoftBls.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
     private synchronized void setType(int type) {
         if (D) Log.d(TAG, "setState() " + mType + " -> " + type);
         mType = type;
         // Give the new state to the Handler so the UI Activity can update
-        mHandler.obtainMessage(vbsoftbls.MESSAGE_TYPE_CHANGE, type, -1).sendToTarget();
+        mHandler.obtainMessage(VBSoftBls.MESSAGE_TYPE_CHANGE, type, -1).sendToTarget();
     }
 
     /**
@@ -180,12 +180,12 @@ public class vbsoftblsService {
 
         // Send the name of the connected device back to the UI Activity
         if(mType==NOT_LISTEN){
-            Message msg = mHandler.obtainMessage(vbsoftbls.MESSAGE_DEVICE_NAME);
+            Message msg = mHandler.obtainMessage(VBSoftBls.MESSAGE_DEVICE_NAME);
             Bundle bundle = new Bundle();
-            bundle.putString(vbsoftbls.DEVICE_NAME, device.getName());
+            bundle.putString(VBSoftBls.DEVICE_NAME, device.getName());
             msg.setData(bundle);
             mHandler.sendMessage(msg);
-            if (D) Log.d(TAG, "connected, DEVICE_NAME:" + vbsoftbls.DEVICE_NAME);
+            if (D) Log.d(TAG, "connected, DEVICE_NAME:" + VBSoftBls.DEVICE_NAME);
         }else if(mType==IS_LISTEN){
             try {
                 JSONObject json = new JSONObject();
@@ -196,9 +196,9 @@ public class vbsoftblsService {
                 if (device.getBluetoothClass() != null) {
                     json.put("class", device.getBluetoothClass().getDeviceClass());
                 }
-                Message msg = mHandler.obtainMessage(vbsoftbls.MESSAGE_DEVICE_INFO);
+                Message msg = mHandler.obtainMessage(VBSoftBls.MESSAGE_DEVICE_INFO);
                 Bundle bundle = new Bundle();
-                bundle.putString(vbsoftbls.DEVICE_INFO, json.toString());
+                bundle.putString(VBSoftBls.DEVICE_INFO, json.toString());
                 msg.setData(bundle);
                 mHandler.sendMessage(msg);
                 if (D) Log.d(TAG, "connected, device:" + json.toString());
@@ -261,17 +261,17 @@ public class vbsoftblsService {
      */
     private void connectionFailed() {
         // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(vbsoftbls.MESSAGE_TOAST);
+        Message msg = mHandler.obtainMessage(VBSoftBls.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(vbsoftbls.TOAST, "Unable to connect to device");
+        bundle.putString(VBSoftBls.TOAST, "Unable to connect to device");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
         // Start the service over to restart listening mode
         if(mType==NOT_LISTEN){
-            vbsoftblsService.this.start();
+            VBSoftBlsService.this.start();
         }else if(mType==IS_LISTEN){
-            vbsoftblsService.this.listen();
+            VBSoftBlsService.this.listen();
         }
     }
 
@@ -283,18 +283,18 @@ public class vbsoftblsService {
 
         // Start the service over to restart listening mode
         if(mType==NOT_LISTEN){
-            Message msg = mHandler.obtainMessage(vbsoftbls.MESSAGE_TOAST);
+            Message msg = mHandler.obtainMessage(VBSoftBls.MESSAGE_TOAST);
             Bundle bundle = new Bundle();
-            bundle.putString(vbsoftbls.TOAST, "Device connection was lost");
+            bundle.putString(VBSoftBls.TOAST, "Device connection was lost");
             msg.setData(bundle);
             mHandler.sendMessage(msg);
-            vbsoftblsService.this.start();
+            VBSoftBlsService.this.start();
         }else if(mType==IS_LISTEN){
-            Message msg = mHandler.obtainMessage(vbsoftbls.MESSAGE_RE_LISTEN);
+            Message msg = mHandler.obtainMessage(VBSoftBls.MESSAGE_RE_LISTEN);
             Bundle bundle = new Bundle();
             msg.setData(bundle);
             mHandler.sendMessage(msg);
-            vbsoftblsService.this.listen();
+            VBSoftBlsService.this.listen();
         }
     }
 
@@ -346,7 +346,7 @@ public class vbsoftblsService {
 
                 // If a connection was accepted
                 if (socket != null) {
-                    synchronized (vbsoftblsService.this) {
+                    synchronized (VBSoftBlsService.this) {
                         switch (mState) {
                             case STATE_LISTEN:
                             case STATE_CONNECTING:
@@ -429,7 +429,7 @@ public class vbsoftblsService {
                 Log.e(TAG, e.toString());
 
                 // Some 4.1 devices have problems, try an alternative way to connect
-                // See https://github.com/don/vbsoftbls/issues/89
+                // See https://github.com/don/VBSoftBls/issues/89
                 try {
                     Log.i(TAG,"Trying fallback...");
                     mmSocket = (BluetoothSocket) mmDevice.getClass().getMethod("createRfcommSocket", new Class[] {int.class}).invoke(mmDevice,1);
@@ -448,7 +448,7 @@ public class vbsoftblsService {
             }
 
             // Reset the ConnectThread because we're done
-            synchronized (vbsoftblsService.this) {
+            synchronized (VBSoftBlsService.this) {
                 mConnectThread = null;
             }
 
@@ -505,7 +505,7 @@ public class vbsoftblsService {
                     String data = new String(buffer, 0, bytes);
 
                     // Send the new data String to the UI Activity
-                    mHandler.obtainMessage(vbsoftbls.MESSAGE_READ, data).sendToTarget();
+                    mHandler.obtainMessage(VBSoftBls.MESSAGE_READ, data).sendToTarget();
 
                     // Send the raw bytestream to the UI Activity.
                     // We make a copy because the full array can have extra data at the end
@@ -513,7 +513,7 @@ public class vbsoftblsService {
                     Log.i(TAG, "bytes:"+bytes);
                     if (bytes > 0) {
                         byte[] rawdata = Arrays.copyOf(buffer, bytes);
-                        mHandler.obtainMessage(vbsoftbls.MESSAGE_READ_RAW, rawdata).sendToTarget();
+                        mHandler.obtainMessage(VBSoftBls.MESSAGE_READ_RAW, rawdata).sendToTarget();
                     }
 
                 } catch (IOException e) {
@@ -534,7 +534,7 @@ public class vbsoftblsService {
                 mmOutStream.write(buffer);
 
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(vbsoftbls.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
+                mHandler.obtainMessage(VBSoftBls.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
 
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);

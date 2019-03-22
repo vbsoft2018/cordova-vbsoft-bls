@@ -36,7 +36,7 @@ var app = {
         resultDiv.innerHTML="";
     },
     onDeviceReady: function() {
-        bluetoothSerial.listen(app.onListen, app.onError);
+        VBSoftBls.listen(app.onListen, app.onError);
     },
     onListen:function(data){
         /**
@@ -65,7 +65,7 @@ var app = {
                 }else if(data.path==4){
                     app.setMsg("获得POS端的请求反馈信息，ID:"+data.id+"，MSG:"+data.msg);
                 }
-                app.setMsg("Received: <pre>"+bluetoothSerial.uintFormat(data.data,"\n\t")+"</pre>");
+                app.setMsg("Received: <pre>"+VBSoftBls.uintFormat(data.data,"\n\t")+"</pre>");
             }
         }
         /**
@@ -76,7 +76,7 @@ var app = {
         }
         if(data==="relisten"){
             app.setDisabled(true);
-            app.pathType = bluetoothSerial.pathEnum.init,
+            app.pathType = VBSoftBls.pathEnum.init,
             app.setMsg("终端断开，蓝牙服务重新监听...");
             return;
         }
@@ -84,7 +84,7 @@ var app = {
             app.setDisabled(false);
             data=JSON.parse(data);
             app.setMsg("与"+data.name+"["+data.address+"]连接成功");
-            bluetoothSerial.Accpet(onMessage, subscribeFailed);
+            VBSoftBls.Accpet(onMessage, subscribeFailed);
             return;
         }
         app.setMsg("蓝牙服务成功监听...");
@@ -100,10 +100,10 @@ var app = {
     sendQR:function(event){
         if(qrbtn.getAttribute("disabled")==="1") return;
         app.sendType = app.qrscan;
-        bluetoothSerial.getRequsetData(undefined,undefined,undefined,function(){
-            app.pathType = bluetoothSerial.pathEnum.request;
+        VBSoftBls.getRequsetData(undefined,undefined,undefined,function(){
+            app.pathType = VBSoftBls.pathEnum.request;
             setTimeout(function(app){
-                bluetoothSerial.getRequsetData(app.sendType,app.pathType,"019999",app.sendSuccess,app.sendFailure);
+                VBSoftBls.getRequsetData(app.sendType,app.pathType,"019999",app.sendSuccess,app.sendFailure);
             },666,app);
         },undefined); //发送握手报文
     },
@@ -114,10 +114,10 @@ var app = {
      * @param {any} data 
      */
     sendSuccess:function(data) {
-        if(app.pathType == bluetoothSerial.pathEnum.handshake){
+        if(app.pathType == VBSoftBls.pathEnum.handshake){
             data="发送握手报文";
         }
-        if(app.pathType == bluetoothSerial.pathEnum.request){
+        if(app.pathType == VBSoftBls.pathEnum.request){
             data="发送请求报文";
         }
         app.setMsg(data+"成功");

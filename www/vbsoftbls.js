@@ -1,9 +1,7 @@
-/**
-    Author By VBSoft
- */
-cordova.define(
-    "cordova-vbsoft-bls.vbsoftbls", 
-    function(require, exports, module) {
+cordova.define("cordova-vbsoft-bls.VBSoftBls", function(require, exports, module) {
+    /**
+        Author By VBSoft
+    */
     /*global cordova*/
     module.exports = {
         STX:            0x02,   //报文起始
@@ -30,7 +28,7 @@ cordova.define(
          */
         listen: function (success, failure) {
             // alert('platforms⁩/android⁩/platform_www⁩/plugins⁩/cordova-vbsoft-bls⁩/www⁩');
-            cordova.exec(success, failure, "vbsoftbls", "listen", []);
+            cordova.exec(success, failure, "VBSoftBls", "listen", []);
         },
 
         /**
@@ -90,7 +88,7 @@ cordova.define(
                 data = data.buffer;
             }
 
-            cordova.exec(success, failure, "vbsoftbls", "write", [data]);
+            cordova.exec(success, failure, "VBSoftBls", "write", [data]);
         },
         // 允许POS机的连接
         Accpet: function (success, failure) {
@@ -132,7 +130,7 @@ cordova.define(
                 }
                 success(data);
             };
-            cordova.exec(successWrapper, failure, "vbsoftbls", "subscribeRaw", []);
+            cordova.exec(successWrapper, failure, "VBSoftBls", "subscribeRaw", []);
         },
 
 
@@ -144,51 +142,51 @@ cordova.define(
          */
         // clears the data buffer
         clear: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "clear", []);
+            cordova.exec(success, failure, "VBSoftBls", "clear", []);
         },
         // removes data subscription
         unsubscribeRawData: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "unsubscribeRaw", []);
+            cordova.exec(success, failure, "VBSoftBls", "unsubscribeRaw", []);
         },
         connect: function (macAddress, success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "connect", [macAddress]);
+            cordova.exec(success, failure, "VBSoftBls", "connect", [macAddress]);
         },
         // Android only - see http://goo.gl/1mFjZY
         connectInsecure: function (macAddress, success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "connectInsecure", [macAddress]);
+            cordova.exec(success, failure, "VBSoftBls", "connectInsecure", [macAddress]);
         },
         disconnect: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "disconnect", []);
+            cordova.exec(success, failure, "VBSoftBls", "disconnect", []);
         },
         // list bound devices
         list: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "list", []);
+            cordova.exec(success, failure, "VBSoftBls", "list", []);
         },
         isEnabled: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "isEnabled", []);
+            cordova.exec(success, failure, "VBSoftBls", "isEnabled", []);
         },
         isConnected: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "isConnected", []);
+            cordova.exec(success, failure, "VBSoftBls", "isConnected", []);
         },
         // the number of bytes of data available to read is passed to the success function
         available: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "available", []);
+            cordova.exec(success, failure, "VBSoftBls", "available", []);
         },
         // read all the data in the buffer
         read: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "read", []);
+            cordova.exec(success, failure, "VBSoftBls", "read", []);
         },
         // reads the data in the buffer up to and including the delimiter
         readUntil: function (delimiter, success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "readUntil", [delimiter]);
+            cordova.exec(success, failure, "VBSoftBls", "readUntil", [delimiter]);
         },
         // calls the success callback when new data is available
         subscribe: function (delimiter, success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "subscribe", [delimiter]);
+            cordova.exec(success, failure, "VBSoftBls", "subscribe", [delimiter]);
         },
         // removes data subscription
         unsubscribe: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "unsubscribe", []);
+            cordova.exec(success, failure, "VBSoftBls", "unsubscribe", []);
         },
         // calls the success callback when new data is available with an ArrayBuffer
         subscribeRawData: function (success, failure) {
@@ -202,35 +200,35 @@ cordova.define(
                 }
                 success(data);
             };
-            cordova.exec(successWrapper, failure, "vbsoftbls", "subscribeRaw", []);
+            cordova.exec(successWrapper, failure, "VBSoftBls", "subscribeRaw", []);
         },
         // reads the RSSI of the *connected* peripherial
         readRSSI: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "readRSSI", []);
+            cordova.exec(success, failure, "VBSoftBls", "readRSSI", []);
         },
         showBluetoothSettings: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "showBluetoothSettings", []);
+            cordova.exec(success, failure, "VBSoftBls", "showBluetoothSettings", []);
         },
         enable: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "enable", []);
+            cordova.exec(success, failure, "VBSoftBls", "enable", []);
         },
         discoverUnpaired: function (success, failure) {
-            cordova.exec(success, failure, "vbsoftbls", "discoverUnpaired", []);
+            cordova.exec(success, failure, "VBSoftBls", "discoverUnpaired", []);
         },
         setDeviceDiscoveredListener: function (notify) {
             if (typeof notify != 'function')
-                throw 'vbsoftbls.setDeviceDiscoveredListener: Callback not a function';
+                throw 'VBSoftBls.setDeviceDiscoveredListener: Callback not a function';
 
-            cordova.exec(notify, null, "vbsoftbls", "setDeviceDiscoveredListener", []);
+            cordova.exec(notify, null, "VBSoftBls", "setDeviceDiscoveredListener", []);
         },
         clearDeviceDiscoveredListener: function () {
-            cordova.exec(null, null, "vbsoftbls", "clearDeviceDiscoveredListener", []);
+            cordova.exec(null, null, "VBSoftBls", "clearDeviceDiscoveredListener", []);
         },
         setName: function (newName) {
-            cordova.exec(null, null, "vbsoftbls", "setName", [newName]);
+            cordova.exec(null, null, "VBSoftBls", "setName", [newName]);
         },
         setDiscoverable: function (discoverableDuration) {
-            cordova.exec(null, null, "vbsoftbls", "setDiscoverable", [discoverableDuration]);
+            cordova.exec(null, null, "VBSoftBls", "setDiscoverable", [discoverableDuration]);
         },
         uintFormat:function(uint8array,delimiter,system){
             return UintFormat(uint8array,delimiter,system);

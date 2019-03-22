@@ -50,7 +50,7 @@
     "ecosystem:cordova"
   ],
   "license": "Apache-2.0",
-  "main": "./www/vbsoftbls.js",
+  "main": "./www/VBSoftBls.js",
   "name": "cordova-vbsoft-bls",
   "repository": {
     "type": "git",

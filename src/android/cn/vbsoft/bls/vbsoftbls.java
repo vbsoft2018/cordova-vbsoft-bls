@@ -1,3 +1,4 @@
+
 /**
     Author By VBSoft
  */
@@ -31,7 +32,7 @@ import java.util.Set;
 /**
  * PhoneGap Plugin for Serial Communication over Bluetooth
  */
-public class vbsoftbls extends CordovaPlugin {
+public class VBSoftBls extends CordovaPlugin {
 
     // actions
     private static final String LIST = "list";
@@ -67,10 +68,10 @@ public class vbsoftbls extends CordovaPlugin {
     private CallbackContext deviceDiscoveredCallback;
 
     private BluetoothAdapter bluetoothAdapter;
-    private vbsoftblsService vbsoftblsService;
+    private VBSoftBlsService vbsoftblsService;
 
     // Debugging
-    private static final String TAG = "vbsoftbls";
+    private static final String TAG = "VBSoftBls";
     private static final boolean D = true;
 
     // Message types sent from the vbsoftblsService Handler
@@ -108,7 +109,7 @@ public class vbsoftbls extends CordovaPlugin {
         }
 
         if (vbsoftblsService == null) {
-            vbsoftblsService = new vbsoftblsService(mHandler);
+            vbsoftblsService = new VBSoftBlsService(mHandler);
         }
 
         boolean validAction = true;
@@ -206,7 +207,7 @@ public class vbsoftbls extends CordovaPlugin {
 
         } else if (action.equals(IS_CONNECTED)) {
 
-            if (vbsoftblsService.getState() == vbsoftblsService.STATE_CONNECTED) {
+            if (vbsoftblsService.getState() == VBSoftBlsService.STATE_CONNECTED) {
                 callbackContext.success();
             } else {
                 callbackContext.error("Not connected.");
@@ -398,18 +399,18 @@ public class vbsoftbls extends CordovaPlugin {
 
                     if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     switch (msg.arg1) {
-                        case vbsoftblsService.STATE_CONNECTED:
-                            Log.i(TAG, "vbsoftblsService.STATE_CONNECTED");
+                        case VBSoftBlsService.STATE_CONNECTED:
+                            Log.i(TAG, "VBSoftBlsService.STATE_CONNECTED");
                             notifyConnectionSuccess();
                             break;
-                        case vbsoftblsService.STATE_CONNECTING:
-                            Log.i(TAG, "vbsoftblsService.STATE_CONNECTING");
+                        case VBSoftBlsService.STATE_CONNECTING:
+                            Log.i(TAG, "VBSoftBlsService.STATE_CONNECTING");
                             break;
-                        case vbsoftblsService.STATE_LISTEN:
-                            Log.i(TAG, "vbsoftblsService.STATE_LISTEN");
+                        case VBSoftBlsService.STATE_LISTEN:
+                            Log.i(TAG, "VBSoftBlsService.STATE_LISTEN");
                             break;
-                        case vbsoftblsService.STATE_NONE:
-                            Log.i(TAG, "vbsoftblsService.STATE_NONE");
+                        case VBSoftBlsService.STATE_NONE:
+                            Log.i(TAG, "VBSoftBlsService.STATE_NONE");
                             break;
                     }
                     break;
