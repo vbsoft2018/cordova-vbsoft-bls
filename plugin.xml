@@ -3,31 +3,29 @@
     xmlns="http://www.phonegap.com/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-vbsoft-bls"
-    version="0.8.8">
+    version="0.4.7">
 
-    <name>Bluetooth Serial</name>
-    <description>VBSoft BLS Communication Plugin</description>
+    <name>Cordova VBSoft Bluetooth Serial</name>
+    <description>Cordova VBSoft Bluetooth Serial Plugin</description>
     <license>Apache 2.0</license>
-    <keywords>VBSoft, bluetooth, BLE, BLS</keywords>
+    <keywords>bluetooth, BLE, arduino</keywords>
     <repo>https://github.com/vbsoft2018/cordova-vbsoft-bls.git</repo>
     <issue>https://github.com/vbsoft2018/cordova-vbsoft-bls/issues</issue>
 
-    <js-module src="www/VBSoftBls.js" name="VBSoftBls">
-        <clobbers target="window.VBSoftBls" />
+    <js-module src="www/bluetoothSerial.js" name="bluetoothSerial">
+        <clobbers target="window.bluetoothSerial" />
     </js-module>
 
     <platform name="android">
 
         <config-file target="res/xml/config.xml" parent="/widget">
-            <feature name="VBSoftBls">
-                <param name="android-package" value="cn.vbsoft.bls.VBSoftBls"/>
+            <feature name="BluetoothSerial">
+                <param name="android-package" value="cn.vbsoft.bls.BluetoothSerial"/>
             </feature>
         </config-file>
 
-        <source-file src="src/android/cn/vbsoft/bls/VBSoftBls.java"
-            target-dir="src/cn/vbsoft/bls"/>
-        <source-file src="src/android/cn/vbsoft/bls/VBSoftBlsService.java"
-            target-dir="src/cn/vbsoft/bls"/>
+        <source-file src="src/android/cn/vbsoft/bls/BluetoothSerial.java"           target-dir="src/cn/vbsoft/bls"/>
+        <source-file src="src/android/cn/vbsoft/bls/BluetoothSerialService.java"    target-dir="src/cn/vbsoft/bls"/>
 
         <config-file target="AndroidManifest.xml" parent="/manifest">
             <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -38,8 +36,8 @@
     </platform>
 
     <platform name="browser">
-        <js-module src="src/browser/VBSoftBls.js" name="vbsoftbls_browser">
-            <clobbers target="window.VBSoftBls" />
+        <js-module src="src/browser/bluetoothSerial.js" name="BluetoothSerial_browser">
+            <clobbers target="window.bluetoothSerial" />
         </js-module>
 
     </platform>

@@ -1,16 +1,16 @@
 // This implementation is for testing in the brower. Future implemetations *might* be able to use
 // Chrome Bluetooth APIs https://developer.chrome.com/apps/bluetooth or Web Bluetooth.
 
-// Code from PhracturedBlue https://github.com/don/vbsoftbls/issues/115
+// Code from PhracturedBlue https://github.com/don/BluetoothSerial/issues/115
 
 // When using the browser, it is necessary to have a processing function that
 // can emulate the bluetooth device.
 
 // Use the 'register' function as follows:
 //
-// vbsoftbls.register(function(buf) {
-//      //buf.input is the data that was received via vbsoftbls.write
-//      //buf.output is data that will be transmitted via a vbsoftbls.read or subscribe
+// bluetoothSerial.register(function(buf) {
+//      //buf.input is the data that was received via bluetoothSerial.write
+//      //buf.output is data that will be transmitted via a bluetoothSerial.read or subscribe
 //      //Do processing here
 //      buf.input = ""
 // });
@@ -25,7 +25,7 @@
 //   }
 //   return buf;
 // }
-// vbsoftbls.register(echoProxy);
+// bluetoothSerial.register(echoProxy);
 
 module.exports = (function() {
     var connected = false;
@@ -58,7 +58,7 @@ module.exports = (function() {
     };
     return {
         connect : function(mac, success_cb, fail_cb) {
-            btlog("vbsoftbls.connect: " + mac);
+            btlog("bluetoothSerial.connect: " + mac);
             connected = true;
             if (success_cb) { success_cb(); }
         },
@@ -67,28 +67,28 @@ module.exports = (function() {
             process_cb = data_cb;
         },
         disconnect : function(success_cb, fail_cb) {
-            btlog("vbsoftbls.disconnect");
+            btlog("bluetoothSerial.disconnect");
             connected = false;
             window.clearInterval(interval);
             if (success_cb) { success_cb(); }
         },
         write : function(data, success_cb, fail_cb) {
-            btlog("vbsoftbls.write: " + data);
+            btlog("bluetoothSerial.write: " + data);
             buf.input += data;
             if(success_cb) { success_cb(); }
         },
         available : function(success_cb, fail_cb) {
-            btlog("vbsoftbls.available");
+            btlog("bluetoothSerial.available");
             success_cb(buf.output.length);
         },
         read : function(success_cb, fail_cb) {
-            btlog("vbsoftbls.read: " + buf.output);
+            btlog("bluetoothSerial.read: " + buf.output);
             var data = buf.output;
             buf.output = "";
             success_cb(data);
         },
         readUntil : function(delimiter, success_cb, fail_cb) {
-            btlog("vbsoftbls.readUntil");
+            btlog("bluetoothSerial.readUntil");
             var index = buf.output.indexOf(delimiter);
             if (index == -1) {
                 success_cb("");
@@ -99,26 +99,26 @@ module.exports = (function() {
             }
         },
         subscribe : function(delimiter, success_cb, fail_cb) {
-            btlog("vbsoftbls.subscribe '"+delimiter+"'");
+            btlog("bluetoothSerial.subscribe '"+delimiter+"'");
             subscribe_cb = success_cb;
             subscribe_delim = delimiter;
         },
         unsubscribe : function(success_cb, fail_cb) {
-            btlog("vbsoftbls.unsubscribe");
+            btlog("bluetoothSerial.unsubscribe");
             subscribe_delim = false;
             if(success_cb) { success_cb(); }
         },
         subscribeRawData : function(success_cb, fail_cb) {
-            btlog("vbsoftbls.subscribeRawData");
+            btlog("bluetoothSerial.subscribeRawData");
             raw_cb = success_cb;
         },
         unsubscribeRawData : function(success_cb, fail_cb) {
-            btlog("vbsoftbls.unsubscribeRawData");
+            btlog("bluetoothSerial.unsubscribeRawData");
             raw_cb = false;
             if(success_cb) { success_cb(); }
         },
         clear : function(success_cb, fail_cb) {
-            btlog("vbsoftbls.clear");
+            btlog("bluetoothSerial.clear");
             buf.output = "";
             if(success_cb) { success_cb(); }
         },
@@ -136,7 +136,7 @@ module.exports = (function() {
           }]
           success_cb(devices);        },
         isConnected : function(success_cb, fail_cb) {
-            btlog("vbsoftbls.isConnected: " + connected);
+            btlog("bluetoothSerial.isConnected: " + connected);
             if(connected) {
                 if(success_cb) { success_cb(); }
             } else {
@@ -144,7 +144,7 @@ module.exports = (function() {
             }
         },
         isEnabled : function(success_cb, fail_cb) {
-            btlog("vbsoftbls.isEnabled: " + enabled);
+            btlog("bluetoothSerial.isEnabled: " + enabled);
             if(enabled) {
                 if(success_cb) { success_cb(); }
             } else {
@@ -152,18 +152,18 @@ module.exports = (function() {
             }
         },
         readRSSI : function(success_cb, fail_cb) {
-            alert("vbsoftbls.readRSSI is not implemented");
+            alert("bluetoothSerial.readRSSI is not implemented");
         },
         showBluetoothSettings : function(success_cb, fail_cb) {
-            alert("vbsoftbls.showBluetoothSettings is not implemented");
+            alert("bluetoothSerial.showBluetoothSettings is not implemented");
         },
         enable : function(success_cb, fail_cb) {
-            btlog("vbsoftbls.enable");
+            btlog("bluetoothSerial.enable");
             enable = true;
             if(success_cb) { success_cb(); }
         },
         discoverUnpaired : function(success_cb, fail_cb) {
-            alert("vbsoftbls.discoverUnpaired is not implemented");
+            alert("bluetoothSerial.discoverUnpaired is not implemented");
         },
     }
 })();

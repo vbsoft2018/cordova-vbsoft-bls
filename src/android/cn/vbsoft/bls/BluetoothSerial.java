@@ -1,4 +1,3 @@
-
 /**
     Author By VBSoft
  */
@@ -32,7 +31,7 @@ import java.util.Set;
 /**
  * PhoneGap Plugin for Serial Communication over Bluetooth
  */
-public class VBSoftBls extends CordovaPlugin {
+public class BluetoothSerial extends CordovaPlugin {
 
     // actions
     private static final String LIST = "list";
@@ -68,13 +67,13 @@ public class VBSoftBls extends CordovaPlugin {
     private CallbackContext deviceDiscoveredCallback;
 
     private BluetoothAdapter bluetoothAdapter;
-    private VBSoftBlsService vbsoftblsService;
+    private BluetoothSerialService bluetoothSerialService;
 
     // Debugging
-    private static final String TAG = "VBSoftBls";
+    private static final String TAG = "BluetoothSerial";
     private static final boolean D = true;
 
-    // Message types sent from the vbsoftblsService Handler
+    // Message types sent from the BluetoothSerialService Handler
     public static final int MESSAGE_TYPE_CHANGE = 0;
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
@@ -108,8 +107,8 @@ public class VBSoftBls extends CordovaPlugin {
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         }
 
-        if (vbsoftblsService == null) {
-            vbsoftblsService = new VBSoftBlsService(mHandler);
+        if (bluetoothSerialService == null) {
+            bluetoothSerialService = new BluetoothSerialService(mHandler);
         }
 
         boolean validAction = true;
@@ -119,7 +118,7 @@ public class VBSoftBls extends CordovaPlugin {
 
         } else if (action.equals(LISTEN)) {
             listenCallback = callbackContext;
-            vbsoftblsService.listen();
+            bluetoothSerialService.listen();
             PluginResult result = new PluginResult(PluginResult.Status.OK,"");
             result.setKeepCallback(true);
             listenCallback.sendPluginResult(result);
@@ -138,7 +137,7 @@ public class VBSoftBls extends CordovaPlugin {
         } else if (action.equals(DISCONNECT)) {
 
             connectCallback = null;
-            vbsoftblsService.stop();
+            bluetoothSerialService.stop();
             callbackContext.success();
 
         } else if (action.equals(WRITE)) {
@@ -147,7 +146,7 @@ public class VBSoftBls extends CordovaPlugin {
             // for(int i=0;i<data.length;i++){
             //     LOG.d(TAG, "data["+i+"]"+String.valueOf(data[i]));
             // }
-            vbsoftblsService.write(data);
+            bluetoothSerialService.write(data);
             callbackContext.success();
 
         } else if (action.equals(AVAILABLE)) {
@@ -207,7 +206,7 @@ public class VBSoftBls extends CordovaPlugin {
 
         } else if (action.equals(IS_CONNECTED)) {
 
-            if (vbsoftblsService.getState() == VBSoftBlsService.STATE_CONNECTED) {
+            if (bluetoothSerialService.getState() == BluetoothSerialService.STATE_CONNECTED) {
                 callbackContext.success();
             } else {
                 callbackContext.error("Not connected.");
@@ -292,8 +291,8 @@ public class VBSoftBls extends CordovaPlugin {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (vbsoftblsService != null) {
-            vbsoftblsService.stop();
+        if (bluetoothSerialService != null) {
+            bluetoothSerialService.stop();
         }
     }
 
@@ -361,7 +360,7 @@ public class VBSoftBls extends CordovaPlugin {
 
         if (device != null) {
             connectCallback = callbackContext;
-            vbsoftblsService.connect(device, secure);
+            bluetoothSerialService.connect(device, secure);
             buffer.setLength(0);
 
             PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
@@ -373,7 +372,7 @@ public class VBSoftBls extends CordovaPlugin {
         }
     }
 
-    // The Handler that gets information back from the vbsoftblsService
+    // The Handler that gets information back from the BluetoothSerialService
     // Original code used handler for the because it was talking to the UI.
     // Consider replacing with normal callbacks
     private final Handler mHandler = new Handler() {
@@ -399,18 +398,18 @@ public class VBSoftBls extends CordovaPlugin {
 
                     if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     switch (msg.arg1) {
-                        case VBSoftBlsService.STATE_CONNECTED:
-                            Log.i(TAG, "VBSoftBlsService.STATE_CONNECTED");
+                        case BluetoothSerialService.STATE_CONNECTED:
+                            Log.i(TAG, "BluetoothSerialService.STATE_CONNECTED");
                             notifyConnectionSuccess();
                             break;
-                        case VBSoftBlsService.STATE_CONNECTING:
-                            Log.i(TAG, "VBSoftBlsService.STATE_CONNECTING");
+                        case BluetoothSerialService.STATE_CONNECTING:
+                            Log.i(TAG, "BluetoothSerialService.STATE_CONNECTING");
                             break;
-                        case VBSoftBlsService.STATE_LISTEN:
-                            Log.i(TAG, "VBSoftBlsService.STATE_LISTEN");
+                        case BluetoothSerialService.STATE_LISTEN:
+                            Log.i(TAG, "BluetoothSerialService.STATE_LISTEN");
                             break;
-                        case VBSoftBlsService.STATE_NONE:
-                            Log.i(TAG, "VBSoftBlsService.STATE_NONE");
+                        case BluetoothSerialService.STATE_NONE:
+                            Log.i(TAG, "BluetoothSerialService.STATE_NONE");
                             break;
                     }
                     break;
