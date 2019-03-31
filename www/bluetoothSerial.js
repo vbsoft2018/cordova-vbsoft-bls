@@ -1,3 +1,4 @@
+cordova.define("cordova-vbsoft-bls.bluetoothSerial", function(require, exports, module) {
     /**
         Author By VBSoft
     */
@@ -32,13 +33,14 @@
 
         /**
          * 发送请求包
-         * @param {sendEnum}    type    发包类型
-         * @param {pathEnum}    path    报文类型
-         * @param {String}      msg     发包内容
-         * @param {function}    success 成功回调
-         * @param {function}    failure 失败回调
+         * @param {sendEnum}            type    发包类型
+         * @param {pathEnum}            path    报文类型
+         * @param {String or object}    msg     发包内容
+         * @param {function}            success 成功回调
+         * @param {function}            failure 失败回调
          */
         getRequsetData:function(type,path,msg,success,failure){
+            var msgIsString = false;
             if(type==undefined){
                 type=this.sendEnum.default;
             }
@@ -49,7 +51,10 @@
                 msg="99";
             }
             // app.pathType = path;
-            msg=this.stringToByte(msg);
+            if(typeof(msg)=="string"){
+                msgIsString = true;
+                msg=this.stringToByte(msg);
+            }
             var data = new Array();
             var ID = this.stringToByte((new Date().Format("hhmmss"))+"");
             data.push(this.STX);
@@ -61,7 +66,13 @@
                 data.push(ID[i]);
             }
             for(var i=0;i<msg.length;i++){
-                data.push(msg[i]);
+                if(msgIsString){
+                    data.push(msg[i]);
+                }else{
+                    for(var ii=0;ii<msg[i].length;ii++){
+                        data.push(msg[i][ii]);
+                    }
+                }
             }
             data[1]=parseInt((data.length-1)/256);
             data[2]=parseInt((data.length-1)%256);
@@ -73,8 +84,13 @@
             data.push(LRC);
             this.write(data,typeof(success)==="function"?success:undefined,typeof(failure)==="function"?failure:undefined);
         },
-        // writes data to the bluetooth serial port
-        // data can be an ArrayBuffer, string, integer array, or Uint8Array
+
+        /**
+         * 向蓝牙串口写入数据
+         * @param {any}         data    数据 (ArrayBuffer, string, integer array, Uint8Array)
+         * @param {function}    success 成功回调
+         * @param {function}    failure 失败回调
+         */
         write: function (data, success, failure) {
 
             // convert to ArrayBuffer
@@ -89,7 +105,12 @@
 
             cordova.exec(success, failure, "BluetoothSerial", "write", [data]);
         },
-        // 允许POS机的连接
+
+        /**
+         * 允许POS机的连接
+         * @param {function}    success 成功回调
+         * @param {function}    failure 失败回调
+         */
         Accpet: function (success, failure) {
 
             successWrapper = function(data) {
@@ -132,7 +153,197 @@
             cordova.exec(successWrapper, failure, "BluetoothSerial", "subscribeRaw", []);
         },
 
+        /**
+         * 获取格式化后的时间值
+         * @param {Date} date       日期时间
+         * @param {String} format   格式（如 yyyy-mm-dd）
+         * @returns {String}
+         */
+        getLocalDate:function(date,format){
+            if(date==undefined) date=new Date();
+            if(format==undefined) format="yyyy-mm-dd";
+            return date.Format(format);
+        },
 
+        /**
+         * 生成POS交易报文
+         * @param {String} PlatNo 
+         * @param {String} TransType 
+         * @param {String} CardType 
+         * @param {String} StoreNo 
+         * @param {String} BusinessDay 
+         * @param {String} CashRegNo 
+         * @param {String} CashierNo 
+         * @param {String} Amount 
+         * @param {String} Ticket_Amount 
+         * @param {String} non_sale_Amount 
+         * @param {String} CashTraceNo 
+         * @param {String} OriginTrace 
+         * @param {String} Reserved1 
+         * @param {String} Reserved2 
+         * @param {String} Reserved3 
+         * @param {String} Reserved4 
+         * @param {String} Reserved5 
+         * @param {String} item_line_qty 
+         * @param {String} item_information 
+         * @returns {bytes}
+         * //----- EFT2.0 接口参数结构
+            //----- InputParameter
+            typedef struct requestErpStru {
+            char PlatNo[2];					// Platform No,
+            char TransType[2];				// Transaction type
+            char CardType[2];				// Card type
+            char StoreNo[20];				// store number. Input the space on the right if 20 bytes
+            char BusinessDay[8];            // Business day information , as 'YYYYMMDD' format
+            char CashRegNo[6];				// POS number, input the space on the right if 6 bytes
+            char CashierNo[6];				// Cashier Operator ID, input space on the right if 6
+            char Amount[12];				// Amount need to pay .No decimal. Input the space on the //right if 12 bytes is too long.
+            char Ticket_Amount[12];         // Amount of ticket .No decimal. Input the space on the right if
+            char non_sale_Amount[12];       // Amount of non-sale item amount.No decimal. Input the
+            char CashTraceNo[6];            // Transaction number. Input the space on the right if
+            char OriginTrace[64];           // If it is void transaction, it should be filled with CardTraceNo
+            char Reserved1[48];	   			// Reserved. Some function need POS input information
+            char Reserved2[48];	   			// Reserved. Some function need POS input information
+            char Reserved3[48];				// Reserved. Some function need POS input information
+            char Reserved4[48];				// Reserved. Some function need POS input information
+            char Reserved5[48];				// Reserved. Some function need POS input information
+            char item_line_qty[2];          // Total item line quantity in this request
+            char item_information[99][50];  // Arrary for every item information in the order
+            // 8  bytes system ID
+            // +4 bytes qty
+            // +8 bytes price
+            // +8 bytes original price
+            // +1 mealdeal flag (Set it as '1' if the item is part of mealdeal in this order, otherwise, set it as '0')
+            // +1 Is Non-sales item (Set it as '1' if the item is non-sales, otherwise set it as '0'
+            // +20 Noun name ( Noun name information , limited in 20 character)
+            } InputPararmeter;
+        */
+        requestErpStru:function(
+            PlatNo,
+            TransType,
+            CardType,
+            StoreNo,
+            BusinessDay,
+            CashRegNo,
+            CashierNo,
+            Amount,
+            Ticket_Amount,
+            non_sale_Amount,
+            CashTraceNo,
+            OriginTrace,
+            Reserved1,
+            Reserved2,
+            Reserved3,
+            Reserved4,
+            Reserved5,
+            item_line_qty,
+            item_information,
+        ){
+            var result = new Array();
+            if(PlatNo==undefined) PlatNo="";
+            if(TransType==undefined) TransType="";
+            if(CardType==undefined) CardType="";
+            if(StoreNo==undefined) StoreNo="";
+            if(BusinessDay==undefined) BusinessDay="";
+            if(CashRegNo==undefined) CashRegNo="";
+            if(CashierNo==undefined) CashierNo="";
+            if(Amount==undefined) Amount="";
+            if(Ticket_Amount==undefined) Ticket_Amount="";
+            if(non_sale_Amount==undefined) non_sale_Amount="";
+            if(CashTraceNo==undefined) CashTraceNo="";
+            if(OriginTrace==undefined) OriginTrace="";
+            if(Reserved1==undefined) Reserved1="";
+            if(Reserved2==undefined) Reserved2="";
+            if(Reserved3==undefined) Reserved3="";
+            if(Reserved4==undefined) Reserved4="";
+            if(Reserved5==undefined) Reserved5="";
+            if(item_line_qty==undefined) item_line_qty="";
+            if(item_information==undefined) item_information="";
+            PlatNo = this.stringToByte(PlatNo,2);
+            result.push(PlatNo);
+            TransType = this.stringToByte(TransType,2);
+            result.push(TransType);
+            CardType = this.stringToByte(CardType,2);
+            result.push(CardType);
+            StoreNo = this.stringToByte(StoreNo,20);
+            result.push(StoreNo);
+            BusinessDay = this.stringToByte(BusinessDay,8);
+            result.push(BusinessDay);
+            CashRegNo = this.stringToByte(CashRegNo,6);
+            result.push(CashRegNo);
+            CashierNo = this.stringToByte(CashierNo,6);
+            result.push(CashierNo);
+            Amount = this.stringToByte(Amount,12);
+            result.push(Amount);
+            Ticket_Amount = this.stringToByte(Ticket_Amount,12);
+            result.push(Ticket_Amount);
+            non_sale_Amount = this.stringToByte(non_sale_Amount,12);
+            result.push(non_sale_Amount);
+            CashTraceNo = this.stringToByte(CashTraceNo,6);
+            result.push(CashTraceNo);
+            OriginTrace = this.stringToByte(OriginTrace,64);
+            result.push(OriginTrace);
+            Reserved1 = this.stringToByte(Reserved1,48);
+            result.push(Reserved1);
+            Reserved2 = this.stringToByte(Reserved2,48);
+            result.push(Reserved2);
+            Reserved3 = this.stringToByte(Reserved3,48);
+            result.push(Reserved3);
+            Reserved4 = this.stringToByte(Reserved4,48);
+            result.push(Reserved4);
+            Reserved5 = this.stringToByte(Reserved5,48);
+            result.push(Reserved5);
+            item_line_qty = this.stringToByte(item_line_qty,2);
+            result.push(item_line_qty);
+            if(typeof(item_information)=="string"){
+                item_information = this.stringToByte(item_information,50);
+            }else{
+                if(typeof(item_information) == "object"){
+                    if(item_information.length == undefined){
+                        item_information = JSON.stringify(item_information);
+                        item_information = this.stringToByte(item_information,50);
+                    }else{
+                        var tempArr = [];
+                        for(var ii in item_information){
+                            var tmp = item_information[ii];
+                            if(typeof(tmp)=="object"){
+                                tmp = JSON.stringify(tmp);
+                            }
+                            tmp = this.stringToByte(tmp,50);
+                            tempArr.push(tmp);
+                        }
+                        // if(tempArr.length<99){
+                        //     for(var ii=0;ii<99-tempArr.length;ii++){
+                        //         var tmp = this.stringToByte('',50);
+                        //         tempArr.push(tmp);
+                        //     }
+                        // }
+                        item_information = tempArr;
+                    }
+                }
+            }
+            result.push(item_information);
+            return result;
+        },
+
+        /**
+         * 判断带入对象是否为空
+         * @param {any} object 
+         * @returns boolean
+         */
+        isEmpty:function(object){
+            var value=object;
+            if(typeof(object)=="object"){
+                if(object==undefined||object==null){
+                    return true;
+                }
+                value = object.value || object.innerHTML || object.innerText;
+            }
+            if(value==""||value==undefined||value==null){
+                return true;
+            }
+            return false;
+        },
 
 
 
@@ -229,11 +440,15 @@
         setDiscoverable: function (discoverableDuration) {
             cordova.exec(null, null, "BluetoothSerial", "setDiscoverable", [discoverableDuration]);
         },
+
+        /**
+         * interface begin
+         */
         uintFormat:function(uint8array,delimiter,system){
             return UintFormat(uint8array,delimiter,system);
         },
-        stringToByte:function(Str){
-            return StringToByte(Str);
+        stringToByte:function(Str,length){
+            return StringToByte(Str,length);
         },
         decodeuint8arr:function(uint8array){
             return Decodeuint8arr(uint8array);
@@ -247,14 +462,17 @@
     /**
      * 共通工具函数部分
      */
+
     /**
      * Convert an Uint8Array into a string.
      * @param {Buffer} uint8array   数据缓存
      * @param {int} system          进制
+     * @param {String} delimiter    分隔符
      * @returns {String}
      */
     var UintFormat=function(uint8array,delimiter,system){
         if(system==undefined) system=16;
+        if(delimiter==undefined) delimiter="";
         var data=new Array();
         for(i in uint8array){
             var tmp = uint8array[i];
@@ -268,26 +486,34 @@
         if(data.length==0) return "";
         return delimiter+data.join(delimiter);
     }
+    
     /**
-     * Convert an Uint8Array into a string.
+     * 转换 Uint8Array 为 string.
      * @param {Buffer} uint8array   数据
+     * @returns {String}
      */
     var Decodeuint8arr=function(uint8array){
         var data = new TextDecoder("utf-8").decode(uint8array);
         return data===undefined?"":data;
     }
+
     /**
-     * Convert a string into a Uint8Array.
-     * @returns {Uint8Array}
+     * 转换 string 为 Uint8Array.
+     * @param {String} String       数据
+     * @returns {Uint8Array}        
      */
     var Encodeuint8arr=function(String){
         return new TextEncoder("utf-8").encode(String);
     }
+
     /**
      * 字符转二进制
-     * @param {string} String 
+     * @param {string}  String      数据
+     * @param {int}     length      指定数据长度（不足的以0x00补位）
+     * @returns {bytes}
      */
-    var StringToByte=function(String) {
+    var StringToByte=function(String,length) {
+        if(length == undefined) length = "";
         var bytes = new Array();
         var len, c;
         len = String.length;
@@ -309,8 +535,22 @@
                 bytes.push(c & 0xFF);
             }
         }
+        if(length != ""){
+            length = parseInt(length);
+            if(length>bytes.length){
+                for(var i=0;i<length-bytes.length;i++){
+                    bytes.push(0x00);
+                }
+            }
+        }
         return bytes;
     }
+
+    /**
+     * 将 string 转换为 Uint8Array
+     * @param {String} str      数据
+     * @returns {Uint8Array}
+     */
     var stringToArrayBuffer = function(str) {
         var ret = new Uint8Array(str.length);
         for (var i = 0; i < str.length; i++) {
@@ -318,8 +558,11 @@
         }
         return ret.buffer;
     };
+
     /**
      * 日期格式化绑定函数
+     * @param {Date} fmt        日期值（日期格式）
+     * @returns {String}    
      */
     Date.prototype.Format = function(fmt){
         var o = {   
@@ -338,3 +581,4 @@
         fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));   
         return fmt;
     }
+});

@@ -1,6 +1,18 @@
 /**
     Author By VBSoft
  */
+window.onerror = function(msg,url,l){
+    var txt="";
+    txt+="错误: \n" + msg + "\n\n";
+    txt+="地址: \n" + url + "\n\n";
+    txt+="行数: " + l + "\n\n";
+    txt+="点击【确定】继续，【取消】终止\n";
+    txt+="=============================\n\n";
+    if(confirm(txt)){
+        return true;
+    }
+    return false;
+}
 var app = {
     objs:       [],
     pathType:   0x00,
@@ -24,10 +36,11 @@ var app = {
         }
         document.addEventListener('deviceready', this.onDeviceReady, false);
         qrbtn.addEventListener(TOUCH_START, this.sendQR, false);
+        paymentbtn.addEventListener(TOUCH_START, this.sendRequest, false);
         resultDiv.addEventListener('dblclick', this.clearResult, false);
         app.objs = [
             qrbtn,
-            // sendbtn,
+            paymentbtn,
             // messageInput,
         ];
         app.setDisabled(true);
@@ -36,6 +49,10 @@ var app = {
         resultDiv.innerHTML="";
     },
     onDeviceReady: function() {
+
+        document.getElementById("table").style.width=document.getElementById("qrbtn").clientWidth+"px";
+        document.getElementById("BusinessDay").value=bluetoothSerial.getLocalDate(undefined,'yyyyMMdd');
+
         bluetoothSerial.listen(app.onListen, app.onError);
     },
     onListen:function(data){
@@ -109,6 +126,56 @@ var app = {
     },
 
 
+    getobj:function(id){
+        var tmp = document.getElementById(id);
+        try{
+            if(bluetoothSerial.isEmpty(tmp)){
+                return "";
+            }else{
+                return tmp.value;
+            }
+        }catch(e){
+            return "";
+        }
+    },
+
+    sendRequest:function(event){
+        if(paymentbtn.getAttribute("disabled")==="1") return;
+        var data=bluetoothSerial.requestErpStru(
+            app.getobj("PlatNo"),
+            app.getobj("TransType"),
+            app.getobj("CardType"),
+            app.getobj("StoreNo"),
+            app.getobj("BusinessDay"),
+            app.getobj("CashRegNo"),
+            app.getobj("Amount"),
+            app.getobj("Ticket_Amount"),
+            app.getobj("non_sale_Amount"),
+            app.getobj("CashTraceNo"),
+            app.getobj("OriginTrace"),
+            app.getobj("Reserved1"),
+            app.getobj("Reserved2"),
+            app.getobj("Reserved3"),
+            app.getobj("Reserved4"),
+            app.getobj("Reserved5"),
+            app.getobj("item_line_qty"),
+        );
+        app.sendType = app.default;
+        bluetoothSerial.getRequsetData(undefined,undefined,undefined,function(){
+            app.pathType = bluetoothSerial.pathEnum.request;
+            setTimeout(function(app){
+                bluetoothSerial.getRequsetData(
+                    app.sendType,
+                    app.pathType,
+                    data,
+                    app.sendSuccess,
+                    app.sendFailure
+                );
+            },666,app);
+        },undefined); //发送握手报文
+
+    },
+
     /**
      * 发送成功回调
      * @param {any} data 
@@ -122,6 +189,7 @@ var app = {
         }
         app.setMsg(data+"成功");
     },
+
     /**
      * 发送失败回调
      * @param {any} data 

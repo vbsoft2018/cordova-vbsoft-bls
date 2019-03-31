@@ -5,12 +5,51 @@
         <meta name="format-detection" content="telephone=no" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Bluetooth Count</title>
+        <title>Bluetooth Serial Example</title>
     </head>
     <body>
-        <!-- <textarea id="messageInput" style="width:100%;height:100pt" placeholder="请输入信息内容"></textarea>
-        <button id="sendbtn" style="width:100%;height:30pt">sendMsg</button> -->
-        <button id="qrbtn" style="width:100%;height:30pt">QRCode</button>
+        <div>
+            <table id="table" width="100%" border="0" cellspacing=0 cellpadding=2 >
+                <tr>
+                    <td>Ticket_Amount</td>
+                    <td>item_line_qty</td>
+                    <td>PlatNo</td>
+                    <td>StoreNo</td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="Ticket_Amount" value="1200" /></td>
+                    <td><input type="text" id="item_line_qty" value="2" /></td>
+                    <td><input type="text" id="PlatNo" value="12" /></td>
+                    <td><input type="text" id="StoreNo" value="SHA221" /></td>
+                </tr>
+                <tr>
+                    <td>CashTraceNo</td>
+                    <td>CashRegNo</td>
+                    <td>BusinessDay</td>
+                    <td>TransType</td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="CashTraceNo" value="20001" /></td>
+                    <td><input type="text" id="CashRegNo" value="3" /></td>
+                    <td><input type="text" id="BusinessDay" value="" /></td>
+                    <td><input type="text" id="TransType" value="30" /></td>
+                </tr>
+                <tr>
+                    <td>OriginTrace</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="OriginTrace" value="KF4S9U65WH8A" /></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <button id="paymentbtn" style="width:100%;height:30pt">Payment</button>
+            <button id="qrbtn" style="width:100%;height:30pt">QRCode</button>
+        </div>
         <div id="resultDiv"></div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>

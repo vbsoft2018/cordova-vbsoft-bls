@@ -1,7 +1,21 @@
 #resultDiv {
     font-size: 0.8em;
+    margin-top: -5px;
 }
 pre{
     margin: 0px;
     padding: 0px;
+}
+#table{
+    width:100%;
+    font-size:0.6rem;
+}
+table,tr,td,input[type='text']{
+    font-size:0.6rem;
+}
+input[type='text']{
+    width: 100%;
+}
+button{
+    margin-bottom: 5px;
 }
