@@ -49,8 +49,7 @@ var app = {
         resultDiv.innerHTML="";
     },
     onDeviceReady: function() {
-
-        document.getElementById("table").style.width=document.getElementById("qrbtn").clientWidth+"px";
+        document.getElementById("table").style.width=document.body.clientWidth+"px";
         document.getElementById("BusinessDay").value=bluetoothSerial.getLocalDate(undefined,'yyyyMMdd');
 
         bluetoothSerial.listen(app.onListen, app.onError);
@@ -141,33 +140,46 @@ var app = {
 
     sendRequest:function(event){
         if(paymentbtn.getAttribute("disabled")==="1") return;
-        var data=bluetoothSerial.requestErpStru(
-            app.getobj("PlatNo"),
-            app.getobj("TransType"),
-            app.getobj("CardType"),
-            app.getobj("StoreNo"),
-            app.getobj("BusinessDay"),
-            app.getobj("CashRegNo"),
-            app.getobj("Amount"),
-            app.getobj("Ticket_Amount"),
-            app.getobj("non_sale_Amount"),
-            app.getobj("CashTraceNo"),
-            app.getobj("OriginTrace"),
-            app.getobj("Reserved1"),
-            app.getobj("Reserved2"),
-            app.getobj("Reserved3"),
-            app.getobj("Reserved4"),
-            app.getobj("Reserved5"),
-            app.getobj("item_line_qty"),
-        );
-        app.sendType = app.default;
+        var data=bluetoothSerial.requestErpStru({
+            PlatNo       : app.getobj("PlatNo"),
+            TransType    : app.getobj("TransType"),
+            CardType     : app.getobj("CardType"),
+            StoreNo      : app.getobj("StoreNo"),
+            BusinessDay  : app.getobj("BusinessDay"),
+            CashRegNo    : app.getobj("CashRegNo"),
+            CashierNo    : app.getobj("CashierNo"),
+            Amount       : app.getobj("Amount"),
+            Ticket_Amount: app.getobj("Ticket_Amount"),
+            non_sale_Amount : app.getobj("non_sale_Amount"),
+            CashTraceNo  : app.getobj("CashTraceNo"),
+            OriginTrace  : app.getobj("OriginTrace"),
+            Reserved1    : app.getobj("Reserved1"),
+            Reserved2    : app.getobj("Reserved2"),
+            Reserved3    : app.getobj("Reserved3"),
+            Reserved4    : app.getobj("Reserved4"),
+            Reserved5    : app.getobj("Reserved5"),
+            item_line_qty: app.getobj("item_line_qty"),
+            item_information: app.getobj("item_information"),
+        });
+
+        var sendData = new Array();
+
+        for(key in data){
+            var tmp = new Array();
+            for(i in data[key]){
+                tmp.push(data[key][i].toString(16));
+                sendData.push(data[key][i]);
+            }
+            app.setMsg(tmp.join(" ")+" //"+key);
+        }
+        app.sendType = app.qrscan;
         bluetoothSerial.getRequsetData(undefined,undefined,undefined,function(){
             app.pathType = bluetoothSerial.pathEnum.request;
             setTimeout(function(app){
                 bluetoothSerial.getRequsetData(
                     app.sendType,
                     app.pathType,
-                    data,
+                    sendData,
                     app.sendSuccess,
                     app.sendFailure
                 );

@@ -11,44 +11,49 @@
         <div>
             <table id="table" width="100%" border="0" cellspacing=0 cellpadding=2 >
                 <tr>
-                    <td>Ticket_Amount</td>
-                    <td>item_line_qty</td>
                     <td>PlatNo</td>
+                    <td>TransType</td>
+                    <td>CardType</td>
                     <td>StoreNo</td>
                 </tr>
                 <tr>
-                    <td><input type="text" id="Ticket_Amount" value="1200" /></td>
-                    <td><input type="text" id="item_line_qty" value="2" /></td>
-                    <td><input type="text" id="PlatNo" value="12" /></td>
-                    <td><input type="text" id="StoreNo" value="SHA221" /></td>
-                </tr>
-                <tr>
-                    <td>CashTraceNo</td>
-                    <td>CashRegNo</td>
-                    <td>BusinessDay</td>
-                    <td>TransType</td>
-                </tr>
-                <tr>
-                    <td><input type="text" id="CashTraceNo" value="20001" /></td>
-                    <td><input type="text" id="CashRegNo" value="3" /></td>
-                    <td><input type="text" id="BusinessDay" value="" /></td>
+                    <td><input type="text" id="PlatNo" value="28" /></td>
                     <td><input type="text" id="TransType" value="30" /></td>
+                    <td><input type="text" id="CardType" value="21" /></td>
+                    <td><input type="text" id="StoreNo" value="PSH232" /></td>
                 </tr>
                 <tr>
-                    <td>OriginTrace</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>BusinessDay</td>
+                    <td>CashRegNo</td>
+                    <td>CashierNo</td>
+                    <td>item_line_qty</td>
                 </tr>
                 <tr>
-                    <td><input type="text" id="OriginTrace" value="KF4S9U65WH8A" /></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><input type="text" id="BusinessDay" value="" /></td>
+                    <td><input type="text" id="CashRegNo" value="1" /></td>
+                    <td><input type="text" id="CashierNo" value="0310" /></td>
+                    <td><input type="text" id="item_line_qty" value="1" /></td>
+                </tr>
+                <tr>
+                    <td>Amount</td>
+                    <td>Ticket_Amount</td>
+                    <td>non_sale_Amount</td>
+                    <td>CashTraceNo</td>
+                </tr>
+                <tr>
+                    <td><input type="text" id="Amount" value="1" /></td>
+                    <td><input type="text" id="Ticket_Amount" value="1" /></td>
+                    <td><input type="text" id="non_sale_Amount" value="1" /></td>
+                    <td><input type="text" id="CashTraceNo" value="10121" /></td>
                 </tr>
             </table>
-            <button id="paymentbtn" style="width:100%;height:30pt">Payment</button>
-            <button id="qrbtn" style="width:100%;height:30pt">QRCode</button>
+            <ul>
+                <li><button id="paymentbtn">Payment</button></li>
+                <li style="float:right;"><button id="qrbtn">QRCode</button></li>
+            </ul>
+            <div class="clear"></div>
+            <input type="hidden" id="OriginTrace" value="KF4S9U65WH8A" />
+            <input type="hidden" id="item_information" value="test" />
         </div>
         <div id="resultDiv"></div>
         <script type="text/javascript" src="cordova.js"></script>

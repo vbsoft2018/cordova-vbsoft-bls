@@ -167,25 +167,28 @@ cordova.define("cordova-vbsoft-bls.bluetoothSerial", function(require, exports, 
 
         /**
          * 生成POS交易报文
-         * @param {String} PlatNo 
-         * @param {String} TransType 
-         * @param {String} CardType 
-         * @param {String} StoreNo 
-         * @param {String} BusinessDay 
-         * @param {String} CashRegNo 
-         * @param {String} CashierNo 
-         * @param {String} Amount 
-         * @param {String} Ticket_Amount 
-         * @param {String} non_sale_Amount 
-         * @param {String} CashTraceNo 
-         * @param {String} OriginTrace 
-         * @param {String} Reserved1 
-         * @param {String} Reserved2 
-         * @param {String} Reserved3 
-         * @param {String} Reserved4 
-         * @param {String} Reserved5 
-         * @param {String} item_line_qty 
-         * @param {String} item_information 
+         * @param {Object} options
+         * {
+         *     {String} PlatNo 
+         *     {String} TransType 
+         *     {String} CardType 
+         *     {String} StoreNo 
+         *     {String} BusinessDay 
+         *     {String} CashRegNo 
+         *     {String} CashierNo 
+         *     {String} Amount 
+         *     {String} Ticket_Amount 
+         *     {String} non_sale_Amount 
+         *     {String} CashTraceNo 
+         *     {String} OriginTrace 
+         *     {String} Reserved1 
+         *     {String} Reserved2 
+         *     {String} Reserved3 
+         *     {String} Reserved4 
+         *     {String} Reserved5 
+         *     {String} item_line_qty 
+         *     {String} item_information 
+         * } 
          * @returns {bytes}
          * //----- EFT2.0 接口参数结构
             //----- InputParameter
@@ -218,28 +221,32 @@ cordova.define("cordova-vbsoft-bls.bluetoothSerial", function(require, exports, 
             // +20 Noun name ( Noun name information , limited in 20 character)
             } InputPararmeter;
         */
-        requestErpStru:function(
-            PlatNo,
-            TransType,
-            CardType,
-            StoreNo,
-            BusinessDay,
-            CashRegNo,
-            CashierNo,
-            Amount,
-            Ticket_Amount,
-            non_sale_Amount,
-            CashTraceNo,
-            OriginTrace,
-            Reserved1,
-            Reserved2,
-            Reserved3,
-            Reserved4,
-            Reserved5,
-            item_line_qty,
-            item_information,
-        ){
-            var result = new Array();
+        requestErpStru:function(options){
+            var result = {};//new Array();
+            var tmp = new Array();
+
+            var PlatNo = options.PlatNo;
+            var TransType = options.TransType;
+            var CardType = options.CardType;
+            var StoreNo = options.StoreNo;
+            var BusinessDay = options.BusinessDay;
+            var CashRegNo = options.CashRegNo;
+            var CashierNo = options.CashierNo;
+            var Amount = options.Amount;
+            var Ticket_Amount = options.Ticket_Amount;
+            var non_sale_Amount = options.non_sale_Amount;
+            var CashTraceNo = options.CashTraceNo;
+            var OriginTrace = options.OriginTrace;
+            var Reserved1 = options.Reserved1;
+            var Reserved2 = options.Reserved2;
+            var Reserved3 = options.Reserved3;
+            var Reserved4 = options.Reserved4;
+            var Reserved5 = options.Reserved5;
+            var item_line_qty = options.item_line_qty;
+            var item_information = options.item_information;
+            
+            var empty = 0x20;
+
             if(PlatNo==undefined) PlatNo="";
             if(TransType==undefined) TransType="";
             if(CardType==undefined) CardType="";
@@ -259,70 +266,109 @@ cordova.define("cordova-vbsoft-bls.bluetoothSerial", function(require, exports, 
             if(Reserved5==undefined) Reserved5="";
             if(item_line_qty==undefined) item_line_qty="";
             if(item_information==undefined) item_information="";
-            PlatNo = this.stringToByte(PlatNo,2);
-            result.push(PlatNo);
-            TransType = this.stringToByte(TransType,2);
-            result.push(TransType);
-            CardType = this.stringToByte(CardType,2);
-            result.push(CardType);
-            StoreNo = this.stringToByte(StoreNo,20);
-            result.push(StoreNo);
-            BusinessDay = this.stringToByte(BusinessDay,8);
-            result.push(BusinessDay);
-            CashRegNo = this.stringToByte(CashRegNo,6);
-            result.push(CashRegNo);
-            CashierNo = this.stringToByte(CashierNo,6);
-            result.push(CashierNo);
-            Amount = this.stringToByte(Amount,12);
-            result.push(Amount);
-            Ticket_Amount = this.stringToByte(Ticket_Amount,12);
-            result.push(Ticket_Amount);
-            non_sale_Amount = this.stringToByte(non_sale_Amount,12);
-            result.push(non_sale_Amount);
-            CashTraceNo = this.stringToByte(CashTraceNo,6);
-            result.push(CashTraceNo);
-            OriginTrace = this.stringToByte(OriginTrace,64);
-            result.push(OriginTrace);
-            Reserved1 = this.stringToByte(Reserved1,48);
-            result.push(Reserved1);
-            Reserved2 = this.stringToByte(Reserved2,48);
-            result.push(Reserved2);
-            Reserved3 = this.stringToByte(Reserved3,48);
-            result.push(Reserved3);
-            Reserved4 = this.stringToByte(Reserved4,48);
-            result.push(Reserved4);
-            Reserved5 = this.stringToByte(Reserved5,48);
-            result.push(Reserved5);
-            item_line_qty = this.stringToByte(item_line_qty,2);
-            result.push(item_line_qty);
-            if(typeof(item_information)=="string"){
-                item_information = this.stringToByte(item_information,50);
-            }else{
-                if(typeof(item_information) == "object"){
-                    if(item_information.length == undefined){
-                        item_information = JSON.stringify(item_information);
-                        item_information = this.stringToByte(item_information,50);
-                    }else{
-                        var tempArr = [];
-                        for(var ii in item_information){
-                            var tmp = item_information[ii];
-                            if(typeof(tmp)=="object"){
-                                tmp = JSON.stringify(tmp);
+            
+            if(PlatNo!=""||1==1){
+                PlatNo = this.stringToByte(PlatNo,2,empty);
+                result.PlatNo = (PlatNo);
+            }
+            if(TransType!=""||1==1){
+                TransType = this.stringToByte(TransType,2,empty);
+                result.TransType = (TransType);
+            }
+            if(CardType!=""||1==1){
+                CardType = this.stringToByte(CardType,2,empty);
+                result.CardType = (CardType);
+            }
+            if(StoreNo!=""||1==1){
+                StoreNo = this.stringToByte(StoreNo,20,empty);
+                result.StoreNo = (StoreNo);
+            }
+            if(BusinessDay!=""||1==1){
+                BusinessDay = this.stringToByte(BusinessDay,8,empty);
+                result.BusinessDay = (BusinessDay);
+            }
+            if(CashRegNo!=""||1==1){
+                CashRegNo = this.stringToByte(CashRegNo,6,empty);
+                result.CashRegNo = (CashRegNo);
+            }
+            if(CashierNo!=""||1==1){
+                CashierNo = this.stringToByte(CashierNo,6,empty);
+                result.CashierNo = (CashierNo);
+            }
+            if(Amount!=""||1==1){
+                Amount = this.stringToByte(Amount,12,empty);
+                result.Amount = (Amount);
+            }
+            if(Ticket_Amount!=""||1==1){
+                Ticket_Amount = this.stringToByte(Ticket_Amount,12,empty);
+                result.Ticket_Amount = (Ticket_Amount);
+            }
+            if(non_sale_Amount!=""||1==1){
+                non_sale_Amount = this.stringToByte(non_sale_Amount,12,empty);
+                result.non_sale_Amount = (non_sale_Amount);
+            }
+            if(CashTraceNo!=""||1==1){
+                CashTraceNo = this.stringToByte(CashTraceNo,6,empty);
+                result.CashTraceNo = (CashTraceNo);
+            }
+            if(OriginTrace!=""||1==1){
+                OriginTrace = this.stringToByte(OriginTrace,64,empty);
+                result.OriginTrace = (OriginTrace);
+            }
+            if(Reserved1!=""||1==1){
+                Reserved1 = this.stringToByte(Reserved1,48,empty);
+                result.Reserved1 = (Reserved1);
+            }
+            if(Reserved2!=""||1==1){
+                Reserved2 = this.stringToByte(Reserved2,48,empty);
+                result.Reserved2 = (Reserved2);
+            }
+            if(Reserved3!=""||1==1){
+                Reserved3 = this.stringToByte(Reserved3,48,empty);
+                result.Reserved3 = (Reserved3);
+            }
+            if(Reserved4!=""||1==1){
+                Reserved4 = this.stringToByte(Reserved4,48,empty);
+                result.Reserved4 = (Reserved4);
+            }
+            if(Reserved5!=""||1==1){
+                Reserved5 = this.stringToByte(Reserved5,48,empty);
+                result.Reserved5 = (Reserved5);
+            }
+            if(item_line_qty!=""||1==1){
+                item_line_qty = this.stringToByte(item_line_qty,2,empty);
+                result.item_line_qty = (item_line_qty);
+            }
+            if(item_information!=""&&item_information!=undefined){
+                if(typeof(item_information)=="string"){
+                    item_information = this.stringToByte(item_information,50,empty);
+                }else{
+                    if(typeof(item_information) == "object"){
+                        if(item_information.length == undefined){
+                            item_information = JSON.stringify(item_information);
+                            item_information = this.stringToByte(item_information,50,empty);
+                        }else{
+                            var tempArr = [];
+                            for(var ii in item_information){
+                                var tmp = item_information[ii];
+                                if(typeof(tmp)=="object"){
+                                    tmp = JSON.stringify(tmp);
+                                }
+                                tmp = this.stringToByte(tmp,50,empty);
+                                tempArr.push(tmp);
                             }
-                            tmp = this.stringToByte(tmp,50);
-                            tempArr.push(tmp);
+                            if(tempArr.length<99){
+                                for(var ii=0;ii<99-tempArr.length;ii++){
+                                    var tmp = this.stringToByte('',50,empty);
+                                    tempArr.push(tmp);
+                                }
+                            }
+                            item_information = tempArr;
                         }
-                        // if(tempArr.length<99){
-                        //     for(var ii=0;ii<99-tempArr.length;ii++){
-                        //         var tmp = this.stringToByte('',50);
-                        //         tempArr.push(tmp);
-                        //     }
-                        // }
-                        item_information = tempArr;
                     }
                 }
+                result.item_information = (item_information);
             }
-            result.push(item_information);
             return result;
         },
 
@@ -447,8 +493,8 @@ cordova.define("cordova-vbsoft-bls.bluetoothSerial", function(require, exports, 
         uintFormat:function(uint8array,delimiter,system){
             return UintFormat(uint8array,delimiter,system);
         },
-        stringToByte:function(Str,length){
-            return StringToByte(Str,length);
+        stringToByte:function(Str,length,empty){
+            return StringToByte(Str,length,empty);
         },
         decodeuint8arr:function(uint8array){
             return Decodeuint8arr(uint8array);
@@ -512,8 +558,9 @@ cordova.define("cordova-vbsoft-bls.bluetoothSerial", function(require, exports, 
      * @param {int}     length      指定数据长度（不足的以0x00补位）
      * @returns {bytes}
      */
-    var StringToByte=function(String,length) {
+    var StringToByte=function(String,length,empty) {
         if(length == undefined) length = "";
+        if(empty == undefined) empty = 0x00;
         var bytes = new Array();
         var len, c;
         len = String.length;
@@ -537,10 +584,8 @@ cordova.define("cordova-vbsoft-bls.bluetoothSerial", function(require, exports, 
         }
         if(length != ""){
             length = parseInt(length);
-            if(length>bytes.length){
-                for(var i=0;i<length-bytes.length;i++){
-                    bytes.push(0x00);
-                }
+            for(var i=bytes.length;i<length;i++){
+                bytes.push(empty);
             }
         }
         return bytes;
