@@ -131,7 +131,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.ResponseCode = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.ResponseCode = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 40;
@@ -141,7 +141,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.ResponseMsg = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.ResponseMsg = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 12;
@@ -151,7 +151,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.Amount = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.Amount = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 6;
@@ -161,7 +161,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.SettleNum = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.SettleNum = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 15;
@@ -171,7 +171,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.MerchantID = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.MerchantID = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 8;
@@ -181,7 +181,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.TerminalID = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.TerminalID = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 8;
@@ -191,7 +191,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.TransDate = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.TransDate = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 6;
@@ -201,7 +201,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.TransTime = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.TransTime = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 64;
@@ -211,7 +211,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.CardTraceNo = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.CardTraceNo = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 2;
@@ -221,7 +221,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.NeedPrint = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.NeedPrint = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 200;
@@ -231,7 +231,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.EFTprintFileName = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.EFTprintFileName = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 32;
@@ -241,7 +241,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.MD5_check_code = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.MD5_check_code = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 48;
@@ -251,7 +251,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.Reserved1 = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.Reserved1 = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 48;
@@ -261,7 +261,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.Reserved2 = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.Reserved2 = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 48;
@@ -271,7 +271,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.Reserved3 = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.Reserved3 = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 48;
@@ -281,7 +281,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.Reserved4 = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.Reserved4 = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 48;
@@ -291,7 +291,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.Reserved5 = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.Reserved5 = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         length = 2;
@@ -301,7 +301,7 @@ var app = {
                                 buf.push(data[j]);
                                 startIndex++;
                             }
-                            dataObject.EFT_quantity = bluetoothSerial.Decodeuint8arr(buf);
+                            dataObject.EFT_quantity = bluetoothSerial.decodeuint8arr(buf);
                         }
 
                         for(k=0;k<10;k++){
@@ -313,7 +313,7 @@ var app = {
                                     buf.push(data[j]);
                                     startIndex++;
                                 }
-                                dataObject.EFT_Detail_information[k] = bluetoothSerial.Decodeuint8arr(buf);
+                                dataObject.EFT_Detail_information[k] = bluetoothSerial.decodeuint8arr(buf);
                             }
                         }
                         app.setMsg("获得POS端的请求反馈信息，ID:"+data.id+"，MSG:"+JSON.stringify(dataObjectß));
