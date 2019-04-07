@@ -18,7 +18,9 @@ cordova.define("cordova-vbsoft-bls.bluetoothSerial", function(require, exports, 
         },
         sendEnum:{
             default:    0x02,   //非二维码扫描时候固定写死
-            qrscan:     0x99,   //二维码扫描时候固定写死
+            request:    0x99,   //发起交易（二维码扫描）请求
+            qrScan:     0x10,   //二维码扫描时候固定写死
+            erpStru:    0x11,   //普通支付交易
         },
 
         /**
@@ -228,15 +230,15 @@ cordova.define("cordova-vbsoft-bls.bluetoothSerial", function(require, exports, 
             var PlatNo = options.PlatNo;
             var TransType = options.TransType;
             var CardType = options.CardType;
-            var StoreNo = options.StoreNo;
-            var BusinessDay = options.BusinessDay;
-            var CashRegNo = options.CashRegNo;
-            var CashierNo = options.CashierNo;
-            var Amount = options.Amount;
-            var Ticket_Amount = options.Ticket_Amount;
+            var StoreNo = options.StoreNo || options.storeId;
+            var BusinessDay = options.BusinessDay || options.transTime;
+            var CashRegNo = options.CashRegNo || options.merchantPosId;
+            var CashierNo = options.CashierNo || options.cashierNo;
+            var Amount = options.Amount || options.amount;
+            var Ticket_Amount = options.Ticket_Amount || options.orderAmount;
             var non_sale_Amount = options.non_sale_Amount;
-            var CashTraceNo = options.CashTraceNo;
-            var OriginTrace = options.OriginTrace;
+            var CashTraceNo = options.CashTraceNo || options.cashTraceNo;
+            var OriginTrace = options.OriginTrace || options.originTrace;
             var Reserved1 = options.Reserved1;
             var Reserved2 = options.Reserved2;
             var Reserved3 = options.Reserved3;
@@ -266,6 +268,107 @@ cordova.define("cordova-vbsoft-bls.bluetoothSerial", function(require, exports, 
             if(Reserved5==undefined) Reserved5="";
             if(item_line_qty==undefined) item_line_qty="";
             if(item_information==undefined) item_information="";
+            
+
+            if(StoreNo==""){
+                return "error:StoreNo is undefined";
+            }
+            if(BusinessDay==""){
+                return "error:BusinessDay is undefined";
+            }
+            if(CashRegNo==""){
+                return "error:CashRegNo is undefined";
+            }
+            // if(OrderId==""){
+            //     return "error:OrderId is undefined";
+            // }
+
+            if(TransType==="30"||TransType==="61"||TransType==="65"){
+                // Consume
+                // 消费
+                if(CashierNo==""){
+                    return "error:CashierNo is undefined";
+                }
+                if(Amount==""){
+                    return "error:Amount is undefined";
+                }
+                if(Ticket_Amount==""){
+                    return "error:OrderAmount is undefined";
+                }
+                if(CashTraceNo==""){
+                    return "error:CashTraceNo is undefined";
+                }
+                OriginTrace = this.stringToByte(OriginTrace,64,empty);
+
+            }else if(TransType==="40"||TransType==="50"||TransType==="62"||TransType==="66"){
+                // Void	取消
+                // 冲正
+                // Refund
+                // 退款
+                if(CashierNo==""){
+                    return "error:CashierNo is undefined";
+                }
+                if(Amount==""){
+                    return "error:Amount is undefined";
+                }
+                if(Ticket_Amount==""){
+                    return "error:OrderAmount is undefined";
+                }
+                if(CashTraceNo==""){
+                    return "error:CashTraceNo is undefined";
+                }
+                if(OriginTrace==""){
+                    return "error:OriginTrace is undefined";
+                }
+            }else if(TransType==="80"||TransType==="63"){
+                // Inquiry
+                // 查询
+                if(CashierNo==""){
+                    return "error:CashierNo is undefined";
+                }
+                if(CashTraceNo==""){
+                    return "error:CashTraceNo is undefined";
+                }
+                Amount = this.stringToByte(Amount,12,empty);
+                Ticket_Amount = this.stringToByte(Ticket_Amount,12,empty);
+                OriginTrace = this.stringToByte(OriginTrace,64,empty);
+
+            }else if(TransType==="90"||TransType==="91"||TransType==="92"){
+                // Initial
+                // 初始化
+                if(CashTraceNo==""){
+                    return "error:CashTraceNo is undefined";
+                }
+                CashierNo = this.stringToByte(CashierNo,6,empty);
+                Amount = this.stringToByte(Amount,12,empty);
+                Ticket_Amount = this.stringToByte(Ticket_Amount,12,empty);
+                OriginTrace = this.stringToByte(OriginTrace,64,empty);
+            }else if(TransType==="64"||TransType==="93"||TransType==="94"){
+                // Create transaction
+                // 创建交易
+                CashierNo = this.stringToByte(CashierNo,6,empty);
+                Amount = this.stringToByte(Amount,12,empty);
+                Ticket_Amount = this.stringToByte(Ticket_Amount,12,empty);
+                OriginTrace = this.stringToByte(OriginTrace,64,empty);
+                CashTraceNo = this.stringToByte(CashTraceNo,6,empty);
+                // Print failure (EFT receipt)
+                // 打印失败（EFT收据）
+
+            // }else if(TransType==="70"){
+            //     // Card Sale
+            //     // 卡片销售
+
+            // }else if(TransType==="71"){
+            //     // Card Sale Confirm
+            //     // 卡片销售确认
+
+            // }else if(TransType==="72"){
+            //     // Cancel Card Sale
+            //     // 取消卡销售
+            }else{
+
+            }
+
             
             if(PlatNo!=""||1==1){
                 PlatNo = this.stringToByte(PlatNo,2,empty);

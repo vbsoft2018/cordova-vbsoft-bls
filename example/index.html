@@ -18,7 +18,26 @@
                 </tr>
                 <tr>
                     <td><input type="text" id="PlatNo" value="28" /></td>
-                    <td><input type="text" id="TransType" value="30" /></td>
+                    <td><select id="TransType">
+                        <option value="30">消费 Consume</option>
+                        <option value="40">取消（冲正）Void</option>
+                        <option value="50">退款 Refund</option>
+                        <option value="80">查询 Inquiry</option>
+                        <option value="90">初始化 Initial</option>
+                        <option value="91">登录 Sign on</option>
+                        <option value="92">结清帐目 Settle</option>
+                        <option value="93">打印成功（EFT收据）Print successful(EFT receipt)</option>
+                        <option value="94">打印失败（EFT收据）Print failure (EFT receipt)</option>
+                        <option value="61">创建交易 Create transaction</option>
+                        <option value="62">关闭交易 Close transaction</option>
+                        <option value="63">重印 Reprint receipt</option>
+                        <option value="64">电子凭证查询 E-voucher inquiry</option>
+                        <option value="65">电子凭证验证 E-Voucher consume</option>
+                        <option value="66">电子凭证撤销 E-Voucher void</option>
+                        <option value="70">卡片销售 Card Sale</option>
+                        <option value="71">卡片销售确认 Card Sale Confirm</option>
+                        <option value="72">取消卡销售 Cancel Card Sale</option>
+                    </select></td>
                     <td><input type="text" id="CardType" value="21" /></td>
                     <td><input type="text" id="StoreNo" value="PSH232" /></td>
                 </tr>
